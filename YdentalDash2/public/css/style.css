@@ -1,0 +1,123 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    text-align: right;
+    font-family: DejaVu Sans, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+}
+
+/* معلومات الطبيب */
+.doctor-info {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.doctor-info h1 {
+    font-size: 2rem;
+    color: #007bff;
+}
+
+/* جدول المعلومات */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+table td {
+    background-color: #fafafa;
+}
+
+/* معلومات المريض */
+.patient-info {
+    margin-bottom: 30px;
+}
+
+.patient-info h2 {
+    color: #007bff;
+}
+
+/* معلومات الحجز */
+.booking-info {
+    margin-bottom: 30px;
+}
+
+.booking-info h2 {
+    color: #007bff;
+}
+
+/* حالة الحجز */
+.badge {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    color: white;
+}
+
+.badge.success {
+    background-color: #28a745;
+}
+
+.badge.warning {
+    background-color: #ffc107;
+}
+
+.badge.danger {
+    background-color: #dc3545;
+}
+
+/* زر العودة */
+.back-btn {
+    text-align: center;
+}
+
+.back-btn button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-btn button:hover {
+    background-color: #0056b3;
+}

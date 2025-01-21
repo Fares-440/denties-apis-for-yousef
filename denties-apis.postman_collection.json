@@ -1,0 +1,967 @@
+{
+	"info": {
+		"_postman_id": "6822107f-f498-4233-96f8-cd60639481dd",
+		"name": "denties-apis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14235809"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "2|6FxjkN1Wm3oicrB86YY2f5yTVHjNpR4ckqsSXfCE8ed2f736",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cache-Control",
+								"value": "no-cache",
+								"name": "cache-control",
+								"type": "text"
+							},
+							{
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>",
+								"name": "postman-token",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"name": "content-type",
+								"type": "text"
+							},
+							{
+								"key": "Content-Length",
+								"value": "<calculated when request is sent>",
+								"name": "content-length",
+								"type": "text"
+							},
+							{
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"name": "host",
+								"type": "text"
+							},
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.39.1",
+								"name": "user-agent",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"name": "accept",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br",
+								"name": "accept-encoding",
+								"type": "text"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive",
+								"name": "connection",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@example.com\",\r\n    \"password\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "تسجيل الدخول كمريض apis",
+			"item": [
+				{
+					"name": "المزيد من التفاصيل",
+					"item": [
+						{
+							"name": "المزيد من التفاصيل",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"password\": \"password123\",\r\n    \"confirmPassword\": \"password123\",\r\n    \"id_card\": \"123456789\",\r\n    \"gender\": \"Male\",\r\n    \"address\": \"123 Main St, City, Country\",\r\n    \"date_of_birth\": \"1990-01-01\",\r\n    \"phone_number\": 1234567890,\r\n    \"userType\": \"patient\",\r\n    \"isBlocked\": \"no\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/thecases/?student_id=19",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"thecases",
+										""
+									],
+									"query": [
+										{
+											"key": "student_id",
+											"value": "19"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "حجز",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"patient_id\":1,\r\n    \"student_id\":1,\r\n    \"thecase_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/appointments/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"appointments",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "تفاصيل الطالب",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/students/1/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"students",
+										"1",
+										""
+									],
+									"query": [
+										{
+											"key": "city_id",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "university_id",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "عرض التعليقات",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/reviews?patient_id=1&student_id=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"reviews"
+									],
+									"query": [
+										{
+											"key": "patient_id",
+											"value": "1"
+										},
+										{
+											"key": "student_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "اضافة تعليق",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"patient_id\": 1,\r\n    \"student_id\": 1,\r\n    \"rating\": 2,\r\n    \"comment\": \"comemnt\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/reviews",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"reviews"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "الطلاب",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/students/by-service/1?search=Students",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"students",
+								"by-service",
+								"1"
+							],
+							"query": [
+								{
+									"key": "city_id",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "university_id",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "Students"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "انشاء حساب",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"email\": \"john.doe@example.com\",\r\n    \"password\": \"password123\",\r\n    \"confirmPassword\": \"password123\",\r\n    \"id_card\": \"123456789\",\r\n    \"gender\": \"Male\",\r\n    \"address\": \"123 Main St, City, Country\",\r\n    \"date_of_birth\": \"1990-01-01\",\r\n    \"phone_number\": 1234567890,\r\n    \"userType\": \"patient\",\r\n    \"isBlocked\": \"no\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/patients/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patients",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "تسجيل الدخول",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"morgan21@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/patients/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patients",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "الحجوزات",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/appointments/?patient_id=1&status=مؤكد",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"appointments",
+								""
+							],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "1"
+								},
+								{
+									"key": "student_id",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "مؤكد"
+								},
+								{
+									"key": "sort_by",
+									"value": "student_id",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "نسية كلمة المرور",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"morgan21@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/patient/password/request-otp",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patient",
+								"password",
+								"request-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "اعادة تعيين كلمة المرور مع مفتاح otp",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"morgan21@gmail.com\",\r\n    \"otp\": \"864914\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/patient/password/reset-with-otp",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patient",
+								"password",
+								"reset-with-otp"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "تسجيل الدخول كطالب",
+			"item": [
+				{
+					"name": "ادارة الحالات",
+					"item": [
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/thecases?service_id=1&student_id=17",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"thecases"
+									],
+									"query": [
+										{
+											"key": "service_id",
+											"value": "1"
+										},
+										{
+											"key": "student_id",
+											"value": "17"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "اضافة حالة",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"service_id\": 1,\r\n    \"procedure\": \"Routine Checkup\",\r\n    \"gender\": \"Male\",\r\n    \"description\": \"Annual health checkup\",\r\n    \"cost\": 100.50,\r\n    \"min_age\": 18,\r\n    \"max_age\": 65,\r\n    \"student_id\": 17,\r\n    \"available_date\": \"2023-12-25\",\r\n    \"available_time\": \"10:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/create-case-with-schedule/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"create-case-with-schedule",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "تعديل الحالة",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"service_id\": 1,\r\n    \"procedure\": \"Routine Checkup\",\r\n    \"gender\": \"Male\",\r\n    \"description\": \"Annual heal4th checkup\",\r\n    \"cost\": 100.50,\r\n    \"min_age\": 18,\r\n    \"max_age\": 65,\r\n    \"student_id\": 17,\r\n    \"available_date\": \"2023-12-25\",\r\n    \"available_time\": \"11:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/update-case-with-schedule/53/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"update-case-with-schedule",
+										"53",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "قائمة المرضى",
+					"item": [
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/students/1/patients",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"students",
+										"1",
+										"patients"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "تفاصيل المريض",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/patients/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"patients",
+										"1"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "اضافة زيارة",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/visits",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"visits"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ارجاع الاجراء تبع المريض او الحجوزات",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/appointments/?patient_id=1&status=مؤكد&student_id=14",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"appointments",
+										""
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										},
+										{
+											"key": "patient_id",
+											"value": "1"
+										},
+										{
+											"key": "status",
+											"value": "مؤكد"
+										},
+										{
+											"key": "student_id",
+											"value": "14"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "الحجوزات تبع المريض",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/appointments",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"appointments"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										},
+										{
+											"key": "patient_id",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "الحجوزات",
+					"item": [
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/appointments/?status=مؤكد&student_id=14",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"appointments",
+										""
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "مؤكد"
+										},
+										{
+											"key": "student_id",
+											"value": "14"
+										},
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "تعديل الحجز",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"patient_id\": 1,\r\n    \"student_id\": 45,\r\n    \"status\": \"ملغي\",\r\n    \"created_at\": \"2025-01-14T09:19:28.000000Z\",\r\n    \"updated_at\": \"2025-01-14T09:19:28.000000Z\",\r\n    \"thecase_id\": 40\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/appointments/1/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"appointments",
+										"1",
+										""
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "قائمة الزيارات",
+					"item": [
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/visits/?status=مكتملة&student_id=14",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"visits",
+										""
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "مكتملة"
+										},
+										{
+											"key": "student_id",
+											"value": "14"
+										},
+										{
+											"key": "search",
+											"value": "غدير",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "تعديل الزيارة",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"visit_date\": \"1984-10-09\",\r\n    \"procedure\": \"Dental Cleaning\",\r\n    \"note\": \"Magnam atque mollitia aut minima. Quibusdam et molestias autem unde ut.\",\r\n    \"status\": \"مكتملة\",\r\n    \"visit_time\": \"06:45:49\",\r\n    \"created_at\": \"2025-01-14T09:19:29.000000Z\",\r\n    \"updated_at\": \"2025-01-14T09:19:29.000000Z\",\r\n    \"appointment_id\": 18\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/visits/1/",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"visits",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "انشاء الحساب",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "ali",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "awli@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "confirmPassword",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "ذكر",
+									"type": "text"
+								},
+								{
+									"key": "level",
+									"value": "ثالث",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "789467",
+									"type": "text"
+								},
+								{
+									"key": "university_card_number",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "city_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "university_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "userType",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "userType",
+									"value": "طالب",
+									"type": "text"
+								},
+								{
+									"key": "isBlocked",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "university_card_image",
+									"value": "",
+									"type": "file"
+								},
+								{
+									"key": "student_image",
+									"value": "",
+									"type": "file"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/students/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"students",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "تسجيل الدخول",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "awli@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/students/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"students",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
