@@ -126,7 +126,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/thecases/?student_id=19",
+									"raw": "{{url}}/thecases/",
 									"host": [
 										"{{url}}"
 									],
@@ -137,7 +137,8 @@
 									"query": [
 										{
 											"key": "student_id",
-											"value": "19"
+											"value": "1",
+											"disabled": true
 										}
 									]
 								}
@@ -263,14 +264,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/students/by-service/1?search=Students",
+							"raw": "{{url}}/students/",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"students",
-								"by-service",
-								"1"
+								""
 							],
 							"query": [
 								{
@@ -285,7 +285,13 @@
 								},
 								{
 									"key": "search",
-									"value": "Students"
+									"value": "Students",
+									"disabled": true
+								},
+								{
+									"key": "service_id",
+									"value": "2",
+									"disabled": true
 								}
 							]
 						}
@@ -813,6 +819,112 @@
 										"visits",
 										"1",
 										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "قائمة المواعيد",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "awli@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/visits/today?student_id=1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"visits",
+										"today"
+									],
+									"query": [
+										{
+											"key": "student_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "عدد المواعيد",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "awli@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/visits/today/count",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"visits",
+										"today",
+										"count"
+									],
+									"query": [
+										{
+											"key": "student_id",
+											"value": "1",
+											"disabled": true
+										}
 									]
 								}
 							},

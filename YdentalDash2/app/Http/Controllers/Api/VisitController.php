@@ -212,4 +212,76 @@ class VisitController extends Controller
             'data' => $visits,
         ]);
     }
+
+    public function getTodaysVisits(Request $request)
+    {
+        $query = Visit::whereDate('visit_date', today())
+            ->with([
+                'appointment' => function ($q) {
+                    $q->select('id', 'student_id', 'patient_id');
+                }
+            ])
+            ->orderBy('visit_time');
+
+        // Add student_id filter
+        if ($request->has('student_id')) {
+            $query->whereHas('appointment', function ($q) use ($request) {
+                $q->where('student_id', $request->student_id);
+            });
+        }
+
+        // Add patient_id filter
+        if ($request->has('patient_id')) {
+            $query->whereHas('appointment', function ($q) use ($request) {
+                $q->where('patient_id', $request->patient_id);
+            });
+        }
+
+        $visits = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => "Today's visits retrieved successfully",
+            'data' => $visits,
+        ]);
+    }
+
+    public function getTodaysVisitsCount(Request $request)
+    {
+        $query = Visit::whereDate('visit_date', today());
+
+        // Add student_id filter
+        if ($request->has('student_id')) {
+            $query->whereHas('appointment', function ($q) use ($request) {
+                $q->where('student_id', $request->student_id);
+            });
+        }
+
+        // Add patient_id filter
+        if ($request->has('patient_id')) {
+            $query->whereHas('appointment', function ($q) use ($request) {
+                $q->where('patient_id', $request->patient_id);
+            });
+        }
+
+        $visits = $query->get();
+
+        $stats = [
+            'total' => $visits->count(),
+            'statuses' => [
+                'غير مكتملة' => $visits->where('status', 'غير مكتملة')->count(),
+                'مكتملة' => $visits->where('status', 'مكتملة')->count(),
+                'ملغية' => $visits->where('status', 'ملغية')->count(),
+            ],
+            'date' => now()->toDateString(),
+            'student_id' => $request->student_id ?? null,
+            'patient_id' => $request->patient_id ?? null
+        ];
+
+        return response()->json([
+            'success' => true,
+            'message' => "Today's visits statistics retrieved successfully",
+            'data' => $stats
+        ]);
+    }
 }

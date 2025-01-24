@@ -45,6 +45,8 @@ Route::controller(StudentController::class)->group(function () {
 Route::apiResource('students', StudentController::class);
 
 Route::get('/visits/select', [VisitController::class, 'select']);
+Route::get('/visits/today', [VisitController::class, 'getTodaysVisits']);
+Route::get('/visits/today/count', [VisitController::class, 'getTodaysVisitsCount']);
 Route::apiResource('visits', VisitController::class);
 
 Route::controller(PatientController::class)->group(function () {
@@ -76,7 +78,6 @@ Route::apiResource('cities', CityController::class);
 
 Route::get('/universities/select', [UniversityController::class, 'select']);
 Route::apiResource('universities', UniversityController::class);
-
 Route::get('/appointments/select', [AppointmentController::class, 'select']);
 Route::apiResource('appointments', AppointmentController::class);
 
