@@ -2,19 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Hash;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+use App\Models\User;
+use Hash;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
         // User::factory(10)->create();
 
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             PatientsTableSeeder::class,
             ServicesTableSeeder::class,
-            SchedulesTableSeeder ::class,
+            SchedulesTableSeeder::class,
             StudentsTableSeeder::class,
             TheCasesTableSeeder::class,
             AppointmentsTableSeeder::class,
@@ -44,7 +44,6 @@ class DatabaseSeeder extends Seeder
             ChatsTableSeeder::class,
             ReviewsTableSeeder::class,
             ReportsTableSeeder::class,
-
         ]);
     }
 }

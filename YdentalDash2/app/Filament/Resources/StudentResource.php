@@ -103,7 +103,7 @@ class StudentResource extends Resource
 
                             ->required()
                             ->maxLength(20),
-                            Forms\Components\TextInput::make('confirmPassword')
+                        Forms\Components\TextInput::make('confirmPassword')
                             ->label(' تأكيد كلمة المرور')
                             ->password()
                             ->same('password')
@@ -128,7 +128,7 @@ class StudentResource extends Resource
                             ->label('المستوى الدراسي ')
 
                             ->required(),
-                            Forms\Components\Textarea::make('description')
+                        Forms\Components\Textarea::make('description')
                             ->label('وصف حول الطالب')
                             ->required()
                             ->columnSpanFull(),
@@ -146,20 +146,20 @@ class StudentResource extends Resource
 
                             ->numeric(),
                         Forms\Components\TextInput::make('university_card_number')
-                        ->label(' الرقم الأكاديمي ')
-                        ->required()
-                        ->unique(ignoreRecord: true)
-                        ->validationMessages([
-                            'unique' => '   :attribute تم تسجيله مسبفا.',
-                        ])
+                            ->label(' الرقم الأكاديمي ')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->validationMessages([
+                                'unique' => '   :attribute تم تسجيله مسبفا.',
+                            ])
                             ->maxLength(12),
 
-                            Forms\Components\FileUpload::make('university_card_image')
+                        Forms\Components\FileUpload::make('university_card_image')
                             ->label('صورة البطاقة الأكاديمية')
                             ->disk('public') // Specify the disk
                             ->directory('images') // Specify the directory
                             ->preserveFilenames(),
-                            Forms\Components\FileUpload::make('student_image')
+                        Forms\Components\FileUpload::make('student_image')
                             ->label('صورة الطالب')
                             ->disk('public') // Specify the disk
                             ->directory('images') // Specify the directory
@@ -179,7 +179,7 @@ class StudentResource extends Resource
                             ->inlineLabel(false)
 
                             ->required(),
-                            Forms\Components\Radio::make('userType')
+                        Forms\Components\Radio::make('userType')
                             ->label('نوع المستخدم')
                             ->options([
                                 'طالب' => 'طالب',
@@ -197,7 +197,7 @@ class StudentResource extends Resource
                 Forms\Components\Section::make('تحديد حالة المستخدم')
                     ->schema([
                         Forms\Components\Select::make('isBlocked')
-                        ->placeholder('تحديد حالة المستخدم')
+                            ->placeholder('تحديد حالة المستخدم')
                             ->label('حالة المستخدم')
                             ->options(
                                 [
@@ -220,51 +220,51 @@ class StudentResource extends Resource
             ->columns([
 
                 Tables\Columns\ImageColumn::make('student_image')
-                ->label('صورة الظالب')
-                ->disk('public')
-                ->circular(),
+                    ->label('صورة الظالب')
+                    ->disk('public')
+                    ->circular(),
 
                 Tables\Columns\TextColumn::make('name')
-                ->label('اسم الطالب')
+                    ->label('اسم الطالب')
 
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('email')
-                ->label(' البريد الإلكتروني')
-                ->icon('heroicon-m-envelope')
+                    ->label(' البريد الإلكتروني')
+                    ->icon('heroicon-m-envelope')
 
-                ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
 
                 Tables\Columns\TextColumn::make('city.name')
-                ->label(' المدينة '),
+                    ->label(' المدينة '),
 
                 Tables\Columns\TextColumn::make('university.name')
-                ->label(' الجامعة ')
-                ->searchable(),
+                    ->label(' الجامعة ')
+                    ->searchable(),
 
 
                 Tables\Columns\TextColumn::make('gender')
-                ->label(' الجنس ')
+                    ->label(' الجنس ')
 
                     ->toggleable(isToggledHiddenByDefault: true),
 
 
                 Tables\Columns\TextColumn::make('level')
-                ->label(' المستوى الدراسي ')
+                    ->label(' المستوى الدراسي ')
 
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('phone_number')
-                ->label(' رقم الهاتف ')
-                ->icon('heroicon-m-phone')
+                    ->label(' رقم الهاتف ')
+                    ->icon('heroicon-m-phone')
 
                     ->numeric(),
 
                 Tables\Columns\TextColumn::make('university_card_number')
-                ->label(' الرقم الأكاديمي ')
+                    ->label(' الرقم الأكاديمي ')
 
                     ->searchable(),
-                    Tables\Columns\ImageColumn::make('university_card_image')
+                Tables\Columns\ImageColumn::make('university_card_image')
                     ->label('صورة البطاقة الأكاديمية')
                     ->disk('public')
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -278,11 +278,12 @@ class StudentResource extends Resource
 
                         'محظور' => 'danger',
                         'نشط' => 'success',
+                        default => 'gray',
                     })
-                    ->icon(fn (string $state): string => match ($state) {
+                    ->icon(fn(string $state): string => match ($state) {
                         'محظور' => 'heroicon-o-x-mark',
                         'نشط' => 'heroicon-o-check-badge',
-
+                        default => 'heroicon-o-question-mark-circle',
                     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -307,7 +308,7 @@ class StudentResource extends Resource
                 //     ])
                 //     ->native(false)
 
-                    // ->label('فلترة حسب حالة المستخدم'),
+                // ->label('فلترة حسب حالة المستخدم'),
                 SelectFilter::make('city')
                     ->relationship(name: 'city', titleAttribute: 'name')
                     ->searchable()
@@ -319,12 +320,12 @@ class StudentResource extends Resource
                 // Tables\Actions\CreateAction::make(),
                 Tables\Actions\Action::make('completedReport')
 
-                    ->label(' تقرير بالطلاب المحجوبين ')->url(fn()=>route('blockedStudent.tes'))
+                    ->label(' تقرير بالطلاب المحجوبين ')->url(fn() => route('blockedStudent.tes'))
                     ->openUrlInNewTab()
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('info'),
 
-                    ])
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -365,14 +366,14 @@ class StudentResource extends Resource
 
 
                         TextEntry::make('university_card_number')
-                        ->label(' الرقم الأكاديمي '),
-                                            ])->columns(5),
-                                            ComponentsSection::make('وصف عن الطالب')
-                                            ->schema([
-                                            TextEntry::make('description')
-                                            ->label(''),
-                                            ]),
-                                            ComponentsSection::make('المدينة والجامعة')
+                            ->label(' الرقم الأكاديمي '),
+                    ])->columns(5),
+                ComponentsSection::make('وصف عن الطالب')
+                    ->schema([
+                        TextEntry::make('description')
+                            ->label(''),
+                    ]),
+                ComponentsSection::make('المدينة والجامعة')
                     ->schema([
                         TextEntry::make('city.name')
                             ->label(' المدينة '),
@@ -381,17 +382,17 @@ class StudentResource extends Resource
                             ->label(' الجامعة '),
                     ])->columns(2),
 
-                    ComponentsSection::make('حالة ونوع المستخدم')
+                ComponentsSection::make('حالة ونوع المستخدم')
                     ->schema([
                         TextEntry::make('isBlocked')
                             ->label('حالة المستخدم'),
 
 
-                    TextEntry::make('userType')
-                    ->label('نوع المستخدم')
+                        TextEntry::make('userType')
+                            ->label('نوع المستخدم')
 
                     ])->columns(2)
-                    ]);
+            ]);
     }
 
     public static function getRelations(): array

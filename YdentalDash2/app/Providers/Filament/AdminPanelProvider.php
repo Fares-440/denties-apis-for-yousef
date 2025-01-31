@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Http\Middleware\VerifyIsAdmin;
 use Filament\FontProviders\GoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -21,9 +20,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
-
 {
-
     public function panel(Panel $panel): Panel
     {
 

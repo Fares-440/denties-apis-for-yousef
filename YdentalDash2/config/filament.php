@@ -2,12 +2,6 @@
 
 return [
 
-    'direction' => 'rtl',
-    'locales' => [
-        'ar' => ['name' => 'Arabic', 'script' => 'Arab', 'native' => 'العربية', 'flag_code' => 'sa'],
-        'en' => ['name' => 'English', 'script' => 'Latn', 'native' => 'English', 'flag_code' => 'us'],
-        // Add other languages as needed
-    ],
     /*
     |--------------------------------------------------------------------------
     | Broadcasting
@@ -29,9 +23,10 @@ return [
         //     'wsHost' => env('VITE_PUSHER_HOST'),
         //     'wsPort' => env('VITE_PUSHER_PORT'),
         //     'wssPort' => env('VITE_PUSHER_PORT'),
-        //     'authEndpoint' => '/api/v1/broadcasting/auth',
+        //     'authEndpoint' => '/broadcasting/auth',
         //     'disableStats' => true,
         //     'encrypted' => true,
+        //     'forceTLS' => true,
         // ],
 
     ],

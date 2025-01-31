@@ -190,12 +190,12 @@ class PatientResource extends Resource
 
                         'محظور' => 'danger',
                         'نشط' => 'success',
-
+                        default => 'gray',
                     })
                     ->icon(fn (string $state): string => match ($state) {
                         'محظور' => 'heroicon-o-x-mark',
                         'نشط' => 'heroicon-o-check-badge',
-
+                        default => 'heroicon-o-question-mark-circle',
                     }),
 
                 Tables\Columns\TextColumn::make('created_at')
