@@ -18,7 +18,7 @@ class TheCaseController extends Controller
     public function index(Request $request)
     {
         // Start with a base query and eager load relationships
-        $query = TheCase::with(['service', 'schedules']);
+        $query = TheCase::with(['service', 'schedules', 'student:id,name,student_image']);
 
         // Search functionality
         if ($request->has('search')) {
