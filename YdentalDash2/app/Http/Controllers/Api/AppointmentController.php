@@ -14,46 +14,51 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
-        // Start with a base query
-        $query = Appointment::query();
+        $query = Appointment::with(['student:id,name', 'patient:id,name']);
 
-        // Search functionality
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('status', 'like', '%' . $search . '%');
+                $q->where('status', 'like', '%' . $search . '%')
+                    ->orWhereHas('patient', function ($pq) use ($search) {
+                        $pq->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('student', function ($sq) use ($search) {
+                        $sq->where('name', 'like', '%' . $search . '%');
+                    });
             });
         }
 
-        // Filter by patient ID
         if ($request->has('patient_id')) {
             $query->where('patient_id', $request->input('patient_id'));
         }
 
-        // Filter by student ID
         if ($request->has('student_id')) {
             $query->where('student_id', $request->input('student_id'));
         }
 
-        // Filter by status
         if ($request->has('status')) {
             $query->where('status', $request->input('status'));
         }
 
-        // Sorting
         if ($request->has('sort_by')) {
             $sortField = $request->input('sort_by');
-            $sortDirection = $request->input('sort_dir', 'asc'); // Default to ascending
-            $query->orderBy($sortField, $sortDirection);
+            $sortDirection = $request->input('sort_dir', 'asc');
+            $allowedSortFields = ['status', 'patient_id', 'student_id', 'created_at']; // الحقول المسموح بها
+
+            if (in_array($sortField, $allowedSortFields)) {
+                $query->orderBy($sortField, $sortDirection);
+            } else {
+                return response()->json(['error' => 'Invalid sort field'], 400);
+            }
         }
 
-        // Paginate the results
-        $perPage = $request->input('per_page', 10); // Default to 10 items per page
+        $perPage = $request->input('per_page', 10);
         $appointments = $query->paginate($perPage);
 
-        // Return the paginated appointments as a JSON response
         return response()->json($appointments);
     }
+
 
     /**
      * Store a newly created resource in storage.

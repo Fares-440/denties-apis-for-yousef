@@ -17,34 +17,40 @@ class TheCaseController extends Controller
      */
     public function index(Request $request)
     {
-        // Start with a base query and eager load relationships
-        $query = TheCase::with(['service', 'schedules', 'student:id,name,student_image']);
+        $query = TheCase::with([
+            'service',
+            'schedules',
+            'student:id,name,student_image,city_id,university_id'
+        ]);
 
-        // Search functionality
+
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('procedure', 'like', '%' . $search . '%')
-                    ->orWhere('description', 'like', '%' . $search . '%');
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    ->orWhereHas('student', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('service', function ($q) use ($search) {
+                        $q->where('service_name', 'like', '%' . $search . '%');
+                    });
             });
         }
 
-        // Filter by service ID
         if ($request->has('service_id')) {
             $query->where('service_id', $request->input('service_id'));
         }
 
-        // Filter by schedule ID
+
         if ($request->has('schedules_id')) {
             $query->where('schedules_id', $request->input('schedules_id'));
         }
 
-        // Filter by gender
         if ($request->has('gender')) {
             $query->where('gender', $request->input('gender'));
         }
 
-        // Filter by cost range
         if ($request->has('min_cost')) {
             $query->where('cost', '>=', $request->input('min_cost'));
         }
@@ -52,7 +58,6 @@ class TheCaseController extends Controller
             $query->where('cost', '<=', $request->input('max_cost'));
         }
 
-        // Filter by age range
         if ($request->has('min_age')) {
             $query->where('min_age', '>=', $request->input('min_age'));
         }
@@ -60,25 +65,35 @@ class TheCaseController extends Controller
             $query->where('max_age', '<=', $request->input('max_age'));
         }
 
-        // Filter by student ID (if provided)
         if ($request->has('student_id')) {
             $query->where('student_id', $request->input('student_id'));
         }
 
-        // Sorting
+        if ($request->has('city_id')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('city_id', $request->input('city_id'));
+            });
+        }
+
+        if ($request->has('university_id')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('university_id', $request->input('university_id'));
+            });
+        }
+
         if ($request->has('sort_by')) {
             $sortField = $request->input('sort_by');
-            $sortDirection = $request->input('sort_dir', 'asc'); // Default to ascending
+            $sortDirection = $request->input('sort_dir', 'asc'); // افتراضي تصاعدي
             $query->orderBy($sortField, $sortDirection);
         }
 
-        // Paginate the results
-        $perPage = $request->input('per_page', 10); // Default to 10 items per page
+        $perPage = $request->input('per_page', 10); // افتراضي 10 عناصر لكل صفحة
         $cases = $query->paginate($perPage);
 
-        // Return the paginated cases as a JSON response
         return response()->json($cases);
     }
+
+
 
 
     /**
