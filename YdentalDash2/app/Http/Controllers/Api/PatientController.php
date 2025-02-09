@@ -101,7 +101,7 @@ class PatientController extends Controller
                 'gender' => 'sometimes|string',
                 'address' => 'sometimes|string',
                 'date_of_birth' => 'sometimes|date',
-                'phone_number' => 'sometimes|integer|unique:patients,phone_number,' . $patient->id,
+                'phone_number' => 'sometimes|string|unique:patients,phone_number,' . $patient->id,
                 'userType' => 'sometimes|string',
                 'isBlocked' => 'sometimes|string',
             ]);

@@ -29,6 +29,10 @@ class ReviewController extends Controller
         if ($request->has('patient_id')) {
             $query->where('patient_id', $request->input('patient_id'));
         }
+        // Filter by student ID
+        if ($request->has('student_id')) {
+            $query->where('student_id', $request->input('student_id'));
+        }
 
         // Filter by rating
         if ($request->has('rating')) {

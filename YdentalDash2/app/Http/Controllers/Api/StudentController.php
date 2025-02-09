@@ -185,22 +185,22 @@ class StudentController extends Controller
         }
 
         try {
-            // Validate the incoming request data
+            // Validate the incoming request data with nullable rules for optional fields
             $validatedData = $request->validate([
-                'student_image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
-                'name' => 'sometimes|string|max:255',
-                'email' => 'sometimes|email|unique:students,email,' . $student->id,
-                'password' => 'sometimes|string|min:6',
-                'confirmPassword' => 'sometimes|string|same:password',
-                'gender' => 'sometimes|string|in:ذكر,انثى',
-                'level' => 'sometimes|string',
-                'phone_number' => 'sometimes|string|unique:students,phone_number,' . $student->id,
-                'university_card_number' => 'sometimes|string',
-                'university_card_image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
-                'city_id' => 'sometimes|exists:cities,id',
-                'university_id' => 'sometimes|exists:universities,id',
-                'userType' => 'sometimes|string',
-                'isBlocked' => 'sometimes|string|in:1,0',
+                'student_image' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+                'name' => 'sometimes|nullable|string|max:255',
+                'email' => 'sometimes|nullable|email|unique:students,email,' . $student->id,
+                'password' => 'sometimes|nullable|string|min:6',
+                'confirmPassword' => 'sometimes|nullable|string|same:password',
+                'gender' => 'sometimes|nullable|string|in:ذكر,انثى',
+                'level' => 'sometimes|nullable|string',
+                'phone_number' => 'sometimes|nullable|string|unique:students,phone_number,' . $student->id,
+                'university_card_number' => 'sometimes|nullable|string',
+                'university_card_image' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+                'city_id' => 'sometimes|nullable|exists:cities,id',
+                'university_id' => 'sometimes|nullable|exists:universities,id',
+                'userType' => 'sometimes|nullable|string',
+                'isBlocked' => 'sometimes|nullable|string|in:1,0',
             ]);
 
             // Handle student image upload
@@ -274,6 +274,7 @@ class StudentController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
