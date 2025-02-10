@@ -12,7 +12,10 @@ class VisitController extends Controller
     public function index(Request $request)
     {
         // Start with a base query
-        $query = Visit::query();
+        $query = Visit::query()->with([
+            'appointment.patient:id,name',
+            'appointment.student:id,name'
+        ]);
 
         // Search functionality
         if ($request->has('search')) {
