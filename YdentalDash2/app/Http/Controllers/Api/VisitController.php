@@ -221,7 +221,8 @@ class VisitController extends Controller
         $query = Visit::whereDate('visit_date', today())
             ->with([
                 'appointment' => function ($q) {
-                    $q->select('id', 'student_id', 'patient_id');
+                    $q->select('id', 'student_id', 'patient_id')
+                    ->with(['patient:id,name']);
                 }
             ])
             ->orderBy('visit_time');

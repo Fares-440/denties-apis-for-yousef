@@ -56,7 +56,7 @@ Route::apiResource('patients', PatientController::class);
 
 
 // باقي المسارات المحمية بواسطة Sanctum
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
 
     // مسارات الزيارات
     Route::get('/visits/select', [VisitController::class, 'select']);
@@ -111,7 +111,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // تفاصيل المستخدم (بعد المصادقة)
     Route::get('/user', [AuthController::class, 'userDetails']);
-});
+// });
 
 // Apply Firebase middleware to specific routes
 // Route::middleware([FirebaseAuthMiddleware::class])->group(function () {
