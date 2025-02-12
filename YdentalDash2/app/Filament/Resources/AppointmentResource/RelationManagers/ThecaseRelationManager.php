@@ -2,76 +2,80 @@
 
 namespace App\Filament\Resources\AppointmentResource\RelationManagers;
 
-use App\Models\Appointment;
-use App\Models\Thecase;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use GPBMetadata\Google\Api\Label;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ThecaseRelationManager extends RelationManager
 {
     protected static string $relationship = 'thecase';
-    // protected static ?string $recordTitleAttribute = 'الحالة';
-    public static function getTitle( Model $ownerRecord, string $pageClass ): string {
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
         return __('تفاصيل حول الحجز');
     }
-
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
+                // Edit fields for Thecase model
+                Forms\Components\TextInput::make('procedure')
+                    ->label('الإجراء')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\Select::make('schedules_id')
-->relationship('schedules','available_date')
-
+                Forms\Components\TextInput::make('gender')
+                    ->label('الجنس')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('cost')
+                    ->label('التكلفة')
+                    ->required(),
+                // If you wish to edit schedules, you can use a repeater:
+                Forms\Components\Repeater::make('schedules')
+                    ->relationship()
+                    ->schema([
+                        Forms\Components\TextInput::make('available_date')
+                            ->label('تاريخ الحجز')
+                            ->required(),
+                        Forms\Components\TextInput::make('available_time')
+                            ->label('وقت الحجز')
+                            ->required(),
+                    ])
+                    ->columns(2)
+                    ->label('مواعيد الحجز'),
             ]);
     }
-
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('id')
+            ->recordTitleAttribute('procedure')
             ->columns([
-
                 Tables\Columns\TextColumn::make('gender')
-                ->label('الجنس'),
+                    ->label('الجنس'),
                 Tables\Columns\TextColumn::make('procedure')
-                ->label('الإجراء'),
-
+                    ->label('الإجراء'),
                 Tables\Columns\TextColumn::make('cost')
-                ->formatStateUsing(fn($state)=>'$'.number_format($state,2))
-                ->label('التكلفة'),
-
-                Tables\Columns\TextColumn::make('schedules.available_date')
-->label('تاريخ الحجز'),
-
-Tables\Columns\TextColumn::make('schedules.available_time')
-->label('وقت الحجز')
-
-
-
-
-
+                    ->label('التكلفة')
+                    ->formatStateUsing(fn ($state) => '$' . number_format($state, 2)),
+                // Display the first schedule's available_date
+                Tables\Columns\TextColumn::make('schedules_first_date')
+                    ->label('تاريخ الحجز')
+                    ->getStateUsing(fn (Model $record) => optional($record->schedules->first())->available_date),
+                // Display the first schedule's available_time
+                Tables\Columns\TextColumn::make('schedules_first_time')
+                    ->label('وقت الحجز')
+                    ->getStateUsing(fn (Model $record) => optional($record->schedules->first())->available_time),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
-
             ])
             ->actions([
-
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

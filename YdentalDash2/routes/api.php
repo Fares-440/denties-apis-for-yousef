@@ -33,13 +33,15 @@ use App\Http\Middleware\FirebaseAuthMiddleware;
 
 // المسارات العامة التي لا تحتاج للمصادقة
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login'])->name('login'); // Added ->name('login')
+Route::post('login', [AuthController::class, 'login'])->name('api.login'); // Added ->name('login')
 
 // وضع مسارات تسجيل الدخول والـ OTP خارج مجموعة auth:sanctum
 Route::post('/patients/login', [PatientController::class, 'login']);
 Route::post('/patient/password/request-otp', [PatientController::class, 'requestOtp']);
 Route::post('/patient/password/reset-with-otp', [PatientController::class, 'resetPasswordWithOtp']);
 Route::post('/students/login', [StudentController::class, 'login']);
+Route::post('/student/password/request-otp', [StudentController::class, 'requestOtp']);
+Route::post('/student/password/reset-with-otp', [StudentController::class, 'resetPasswordWithOtp']);
 
     // مسارات الطلاب
     Route::controller(StudentController::class)->group(function () {

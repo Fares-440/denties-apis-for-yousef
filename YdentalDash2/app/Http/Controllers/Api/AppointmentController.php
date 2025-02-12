@@ -18,7 +18,7 @@ class AppointmentController extends Controller
         $query = Appointment::with([
             'student:id,name',
             'patient:id,name',
-            'thecase'  // This will load all the case info. Optionally, you can limit the fields.
+            'thecase.schedules'
         ]);
 
         if ($request->has('search')) {

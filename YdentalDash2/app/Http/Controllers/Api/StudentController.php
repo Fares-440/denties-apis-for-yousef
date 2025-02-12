@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\SendOtp;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
 
 class StudentController extends Controller
 {
@@ -461,6 +465,59 @@ class StudentController extends Controller
             'success' => true,
             'message' => 'Students retrieved successfully',
             'data' => $students,
+        ]);
+    }
+
+    public function requestOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:students,email', // Validate against students table
+        ]);
+
+        $student = Student::where('email', $request->email)->first();
+
+        $otp = rand(100000, 999999);
+        $student->otp = $otp;
+        $student->otp_expires_at = Carbon::now()->addMinutes(10);
+        $student->save();
+
+        Mail::to($student->email)->send(new SendOtp($otp));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP sent to your email.',
+        ]);
+
+    }
+
+    public function resetPasswordWithOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:students,email',
+            'otp' => 'required|string|size:6',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $student = Student::where('email', $request->email)
+            ->where('otp', $request->otp)
+            ->where('otp_expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$student) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired OTP.',
+            ], 400);
+        }
+
+        $student->password = Hash::make($request->password);
+        $student->otp = null;
+        $student->otp_expires_at = null;
+        $student->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Your password has been reset successfully.',
         ]);
     }
 }
