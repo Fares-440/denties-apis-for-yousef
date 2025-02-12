@@ -14,7 +14,7 @@ class TheCaseFactory extends Factory
     public function definition()
     {
         $services = Service::all()->pluck('id')->toArray();
-        $schedules = Schedule::all()->pluck('id')->toArray();
+        // $schedules = Schedule::all()->pluck('id')->toArray();
 
         $procedureList = [
             'Dental Checkup',
@@ -34,7 +34,7 @@ class TheCaseFactory extends Factory
 
         return [
             'service_id' => $this->faker->randomElement($services),
-            'schedules_id' => $this->faker->randomElement($schedules),
+            // 'schedules_id' => $this->faker->randomElement($schedules),
             'procedure' => $this->faker->randomElement($procedureList),
             'gender' => $this->faker->randomElement(['Male', 'Female', 'Any']),
             'description' => $this->faker->paragraph(),

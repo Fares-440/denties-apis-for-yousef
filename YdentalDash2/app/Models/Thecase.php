@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Thecase extends Model
 {
     use HasFactory;
     protected $fillable = [
         'service_id',
-        'schedules_id',
         'procedure',
         'gender',
         'description',
@@ -25,10 +25,9 @@ class Thecase extends Model
     {
         return $this->belongsTo(Service::class);
     }
-    public function schedules(): BelongsTo
+    public function schedules(): HasMany
     {
-        // return $this->belongsTo(Schedule::class);
-        return $this->belongsTo(Schedule::class, 'schedules_id');
+        return $this->hasMany(Schedule::class);
     }
 
     public function student(): BelongsTo

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('thecases', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('schedules_id')->constrained('schedules')->cascadeOnDelete();
+            // $table->foreignId('schedules_id')->constrained('schedules')->cascadeOnDelete();
             $table->String('procedure');
             $table->String('gender');
             $table->longText('description');

@@ -14,7 +14,12 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Appointment::with(['student:id,name', 'patient:id,name']);
+        // Eager load student, patient, and thecase information.
+        $query = Appointment::with([
+            'student:id,name',
+            'patient:id,name',
+            'thecase'  // This will load all the case info. Optionally, you can limit the fields.
+        ]);
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -44,7 +49,7 @@ class AppointmentController extends Controller
         if ($request->has('sort_by')) {
             $sortField = $request->input('sort_by');
             $sortDirection = $request->input('sort_dir', 'asc');
-            $allowedSortFields = ['status', 'patient_id', 'student_id', 'created_at']; // الحقول المسموح بها
+            $allowedSortFields = ['status', 'patient_id', 'student_id', 'created_at']; // Allowed fields
 
             if (in_array($sortField, $allowedSortFields)) {
                 $query->orderBy($sortField, $sortDirection);
@@ -59,13 +64,12 @@ class AppointmentController extends Controller
         return response()->json($appointments);
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        // Validate the incoming request data
+        // Validate the incoming request data.
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|exists:patients,id',
             'student_id' => 'required|exists:students,id',
@@ -73,24 +77,25 @@ class AppointmentController extends Controller
             // 'status' => 'required|in:بانتظار التأكيد,مؤكد,مكتمل,ملغي',
         ]);
 
-        // If validation fails, return error response
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
-                'errors' => $validator->errors(),
+                'errors'  => $validator->errors(),
             ], 422);
         }
 
-        // Create a new appointment record
+        // Create a new appointment record.
         $appointment = Appointment::create([
             'patient_id' => $request->patient_id,
             'student_id' => $request->student_id,
             'thecase_id' => $request->thecase_id,
-            'status' => "بانتظار التأكيد",
+            'status'     => "بانتظار التأكيد",
             // 'status' => $request->status,
         ]);
 
-        // Return the created appointment as a JSON response
+        // Return the created appointment as a JSON response.
+        // Optionally, you may want to load the related thecase info.
+        $appointment->load(['student:id,name', 'patient:id,name', 'thecase']);
         return response()->json($appointment, 201);
     }
 
@@ -99,17 +104,15 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
-        // Find the appointment by ID
-        $appointment = Appointment::find($id);
+        // Find the appointment by ID with the related thecase, student, and patient data.
+        $appointment = Appointment::with(['student:id,name', 'patient:id,name', 'thecase'])->find($id);
 
-        // If the appointment doesn't exist, return a 404 error
         if (!$appointment) {
             return response()->json([
                 'message' => 'Appointment not found',
             ], 404);
         }
 
-        // Return the appointment as a JSON response
         return response()->json($appointment);
     }
 
@@ -118,41 +121,40 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Find the appointment by ID
+        // Find the appointment by ID.
         $appointment = Appointment::find($id);
 
-        // If the appointment doesn't exist, return a 404 error
         if (!$appointment) {
             return response()->json([
                 'message' => 'Appointment not found',
             ], 404);
         }
 
-        // Validate the incoming request data
+        // Validate the incoming request data.
         $validator = Validator::make($request->all(), [
             'patient_id' => 'sometimes|exists:patients,id',
             'student_id' => 'sometimes|exists:students,id',
             'thecase_id' => 'required|exists:thecases,id',
-            'status' => 'sometimes|in:بانتظار التأكيد,مؤكد,مكتمل,ملغي',
+            'status'     => 'sometimes|in:بانتظار التأكيد,مؤكد,مكتمل,ملغي',
         ]);
 
-        // If validation fails, return error response
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
-                'errors' => $validator->errors(),
+                'errors'  => $validator->errors(),
             ], 422);
         }
 
-        // Update the appointment record
+        // Update the appointment record.
         $appointment->update([
             'patient_id' => $request->patient_id ?? $appointment->patient_id,
             'student_id' => $request->student_id ?? $appointment->student_id,
             'thecase_id' => $request->thecase_id ?? $appointment->thecase_id,
-            'status' => $request->status ?? $appointment->status,
+            'status'     => $request->status ?? $appointment->status,
         ]);
 
-        // Return the updated appointment as a JSON response
+        // Return the updated appointment as a JSON response.
+        $appointment->load(['student:id,name', 'patient:id,name', 'thecase']);
         return response()->json($appointment);
     }
 
@@ -161,31 +163,30 @@ class AppointmentController extends Controller
      */
     public function destroy(string $id)
     {
-        // Find the appointment by ID
+        // Find the appointment by ID.
         $appointment = Appointment::find($id);
 
-        // If the appointment doesn't exist, return a 404 error
         if (!$appointment) {
             return response()->json([
                 'message' => 'Appointment not found',
             ], 404);
         }
 
-        // Delete the appointment record
+        // Delete the appointment record.
         $appointment->delete();
 
-        // Return a success response
         return response()->json([
             'message' => 'Appointment deleted successfully',
         ], 204);
     }
 
+    /**
+     * Retrieve a simplified list of appointments.
+     */
     public function select(Request $request)
     {
-        // Start with a base query
         $query = Appointment::query();
 
-        // Apply filters if provided
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('status', 'like', '%' . $search . '%');
@@ -203,26 +204,22 @@ class AppointmentController extends Controller
             $query->where('status', $request->input('status'));
         }
 
-        // Sorting
         if ($request->has('sort_by')) {
             $sortField = $request->input('sort_by');
-            $sortDirection = $request->input('sort_dir', 'asc'); // Default to ascending
+            $sortDirection = $request->input('sort_dir', 'asc');
             $query->orderBy($sortField, $sortDirection);
         }
 
         // Select only specific fields (id and status)
         $query->select('id', 'status');
 
-        // Paginate the results (optional)
-        $perPage = $request->input('per_page', 10); // Default to 10 items per page
+        $perPage = $request->input('per_page', 10);
         $appointments = $query->paginate($perPage);
 
-        // Return the appointments as a JSON response
         return response()->json([
             'success' => true,
             'message' => 'Appointments retrieved successfully',
-            'data' => $appointments,
+            'data'    => $appointments,
         ]);
     }
-
 }
