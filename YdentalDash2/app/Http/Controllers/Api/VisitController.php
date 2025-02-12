@@ -167,6 +167,12 @@ class VisitController extends Controller
             'status' => $request->status ?? $visit->status,
         ]);
 
+        // Reload the visit with the related appointment, student, and patient data
+        $visit->load([
+            'appointment.patient:id,name',
+            'appointment.student:id,name'
+        ]);
+
         // Return the updated visit as a JSON response
         return response()->json($visit);
     }
