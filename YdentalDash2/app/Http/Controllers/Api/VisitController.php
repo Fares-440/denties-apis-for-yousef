@@ -37,6 +37,22 @@ class VisitController extends Controller
             $query->where('status', $request->input('status'));
         }
 
+        // Filter by student id (from the related appointment)
+        if ($request->has('student_id')) {
+            $studentId = $request->input('student_id');
+            $query->whereHas('appointment.student', function ($q) use ($studentId) {
+                $q->where('id', $studentId);
+            });
+        }
+
+        // Filter by patient id (from the related appointment)
+        if ($request->has('patient_id')) {
+            $patientId = $request->input('patient_id');
+            $query->whereHas('appointment.patient', function ($q) use ($patientId) {
+                $q->where('id', $patientId);
+            });
+        }
+
         // Sorting
         if ($request->has('sort_by')) {
             $sortField = $request->input('sort_by');
@@ -205,6 +221,22 @@ class VisitController extends Controller
             $query->where('status', $request->input('status'));
         }
 
+        // Filter by student id (from the related appointment)
+        if ($request->has('student_id')) {
+            $studentId = $request->input('student_id');
+            $query->whereHas('appointment.student', function ($q) use ($studentId) {
+                $q->where('id', $studentId);
+            });
+        }
+
+        // Filter by patient id (from the related appointment)
+        if ($request->has('patient_id')) {
+            $patientId = $request->input('patient_id');
+            $query->whereHas('appointment.patient', function ($q) use ($patientId) {
+                $q->where('id', $patientId);
+            });
+        }
+
         // Select only id, visit_date, procedure, and status
         $visits = $query->select('id', 'visit_date', 'procedure', 'status')->get();
 
@@ -216,13 +248,14 @@ class VisitController extends Controller
         ]);
     }
 
+
     public function getTodaysVisits(Request $request)
     {
         $query = Visit::whereDate('visit_date', today())
             ->with([
                 'appointment' => function ($q) {
                     $q->select('id', 'student_id', 'patient_id')
-                    ->with(['patient:id,name']);
+                        ->with(['patient:id,name']);
                 }
             ])
             ->orderBy('visit_time');
