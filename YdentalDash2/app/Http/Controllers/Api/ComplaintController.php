@@ -69,7 +69,8 @@ class ComplaintController extends Controller
     {
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
-            'patient_id' => 'required|exists:patients,id',
+            'patient_id' => 'nullable|exists:patients,id',
+            'student_id' => 'nullable|exists:students,id',
             'complaint_type' => 'required|string|max:255',
             'complaint_title' => 'required|string|max:255',
             'complaint_desciption' => 'required|string',
@@ -87,6 +88,7 @@ class ComplaintController extends Controller
         // Create a new complaint record
         $complaint = Complaint::create([
             'patient_id' => $request->patient_id,
+            'student_id' => $request->student_id,
             'complaint_type' => $request->complaint_type,
             'complaint_title' => $request->complaint_title,
             'complaint_desciption' => $request->complaint_desciption,
@@ -133,7 +135,8 @@ class ComplaintController extends Controller
 
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
-            'patient_id' => 'sometimes|exists:patients,id',
+            'patient_id' => 'nullable|exists:patients,id',
+            'student_id' => 'nullable|exists:students,id',
             'complaint_type' => 'sometimes|string|max:255',
             'complaint_title' => 'sometimes|string|max:255',
             'complaint_desciption' => 'sometimes|string',
@@ -148,18 +151,23 @@ class ComplaintController extends Controller
             ], 422);
         }
 
-        // Update the complaint record
-        $complaint->update([
-            'patient_id' => $request->patient_id ?? $complaint->patient_id,
-            'complaint_type' => $request->complaint_type ?? $complaint->complaint_type,
-            'complaint_title' => $request->complaint_title ?? $complaint->complaint_title,
-            'complaint_desciption' => $request->complaint_desciption ?? $complaint->complaint_desciption,
-            'complaint_date' => $request->complaint_date ?? $complaint->complaint_date,
+        // Build an array of only the fields provided in the request.
+        // This way, if patient_id or student_id are provided as null, they will be updated to null.
+        $data = $request->only([
+            'patient_id',
+            'student_id',
+            'complaint_type',
+            'complaint_title',
+            'complaint_desciption',
+            'complaint_date',
         ]);
+
+        $complaint->update($data);
 
         // Return the updated complaint as a JSON response
         return response()->json($complaint);
     }
+
 
     /**
      * Remove the specified resource from storage.
