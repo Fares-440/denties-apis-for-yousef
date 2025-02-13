@@ -95,7 +95,7 @@ class StudentController extends Controller
                 'city_id' => 'required|exists:cities,id',
                 'university_id' => 'required|exists:universities,id',
                 'userType' => 'required|string',
-                'isBlocked' => 'required|string|in:1,0',
+                'isBlocked' => 'required|string',
             ]);
 
             // Handle student image upload
@@ -204,7 +204,7 @@ class StudentController extends Controller
                 'city_id' => 'sometimes|nullable|exists:cities,id',
                 'university_id' => 'sometimes|nullable|exists:universities,id',
                 'userType' => 'sometimes|nullable|string',
-                'isBlocked' => 'sometimes|nullable|string|in:1,0',
+                'isBlocked' => 'sometimes|nullable|string',
             ]);
 
             // Handle student image upload
