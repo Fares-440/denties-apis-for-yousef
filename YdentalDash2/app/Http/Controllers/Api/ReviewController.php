@@ -15,7 +15,10 @@ class ReviewController extends Controller
     public function index(Request $request)
     {
         // Start with a base query
-        $query = Review::query();
+        $query = Review::query()->with([
+            'patient:id,name',
+            'student:id,name'
+        ]);
 
         // Search functionality
         if ($request->has('search')) {
@@ -179,7 +182,10 @@ class ReviewController extends Controller
     public function select(Request $request)
     {
         // Start with a base query
-        $query = Review::query();
+        $query = Review::query()->with([
+            'patient:id,name',
+            'student:id,name'
+        ]);
 
         // Apply filters if provided
         if ($request->has('search')) {
