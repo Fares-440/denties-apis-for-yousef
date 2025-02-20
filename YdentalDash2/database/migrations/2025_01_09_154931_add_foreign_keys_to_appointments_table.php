@@ -12,6 +12,8 @@ return new class extends Migration {
     {
         Schema::table('appointments', function (Blueprint $table) {
             $table->foreignId('thecase_id')->constrained('thecases')->cascadeOnDelete();
+            $table->foreignId('schedule_id')->constrained('schedules')->cascadeOnDelete();
+
         });
     }
 
@@ -23,6 +25,8 @@ return new class extends Migration {
         Schema::table('appointments', function (Blueprint $table) {
             $table->dropForeign(['thecase_id']);
             $table->dropColumn('thecase_id');
+            $table->dropForeign(['schedule_id']);
+            $table->dropColumn('schedule_id');
         });
     }
 };

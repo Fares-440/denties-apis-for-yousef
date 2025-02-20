@@ -13,7 +13,8 @@ class Appointment extends Model
     protected $fillable = [
         'patient_id',
         'student_id',
-        'thecase_id', // Add thecase_id to fillable
+        'thecase_id',
+        'schedule_id',
         'status'
 
     ];
@@ -50,5 +51,9 @@ class Appointment extends Model
     public function visits(): HasMany
     {
         return $this->hasMany(Visit::class);
+    }
+    public function schedule(): BelongsTo
+    {
+        return $this->belongsTo(Schedule::class);
     }
 }

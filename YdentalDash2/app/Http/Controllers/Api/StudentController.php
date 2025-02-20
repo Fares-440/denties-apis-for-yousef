@@ -387,7 +387,7 @@ class StudentController extends Controller
             }
 
             // Get the authenticated student
-            $student = Auth::guard('students')->user();
+            $student = Auth::guard('students')->user()->load('city', 'university');;
 
             // Create a new API token for the student
             $token = $student->createToken('student-token')->plainTextToken;

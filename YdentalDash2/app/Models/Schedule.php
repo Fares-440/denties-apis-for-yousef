@@ -19,5 +19,8 @@ class Schedule extends Model
     {
         return $this->belongsTo(Thecase::class);
     }
-
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

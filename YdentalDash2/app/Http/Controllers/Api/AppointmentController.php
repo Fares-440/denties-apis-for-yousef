@@ -14,12 +14,14 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
-        // Eager load student, patient, and thecase information.
+        // Eager load student, patient,schedule, and thecase information.
         $query = Appointment::with([
             'student:id,name',
             'patient:id,name',
-            'thecase.schedules'
+            'thecase.schedules',
+            'schedule',
         ]);
+
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -40,6 +42,10 @@ class AppointmentController extends Controller
 
         if ($request->has('student_id')) {
             $query->where('student_id', $request->input('student_id'));
+        }
+
+        if ($request->has('schedule_id')) {
+            $query->where('schedule_id', $request->input('schedule_id'));
         }
 
         if ($request->has('status')) {
@@ -74,6 +80,7 @@ class AppointmentController extends Controller
             'patient_id' => 'required|exists:patients,id',
             'student_id' => 'required|exists:students,id',
             'thecase_id' => 'required|exists:thecases,id',
+            'schedule_id' => 'required|exists:schedules,id',
             // 'status' => 'required|in:بانتظار التأكيد,مؤكد,مكتمل,ملغي',
         ]);
 
@@ -89,13 +96,14 @@ class AppointmentController extends Controller
             'patient_id' => $request->patient_id,
             'student_id' => $request->student_id,
             'thecase_id' => $request->thecase_id,
+            'schedule_id' => $request->schedule_id,
             'status'     => "بانتظار التأكيد",
             // 'status' => $request->status,
         ]);
 
         // Return the created appointment as a JSON response.
         // Optionally, you may want to load the related thecase info.
-        $appointment->load(['student:id,name', 'patient:id,name', 'thecase']);
+        $appointment->load(['student:id,name', 'patient:id,name', 'thecase','schedule']);
         return response()->json($appointment, 201);
     }
 
@@ -105,7 +113,7 @@ class AppointmentController extends Controller
     public function show(string $id)
     {
         // Find the appointment by ID with the related thecase, student, and patient data.
-        $appointment = Appointment::with(['student:id,name', 'patient:id,name', 'thecase'])->find($id);
+        $appointment = Appointment::with(['student:id,name', 'patient:id,name', 'thecase','schedule'])->find($id);
 
         if (!$appointment) {
             return response()->json([
@@ -135,6 +143,7 @@ class AppointmentController extends Controller
             'patient_id' => 'sometimes|exists:patients,id',
             'student_id' => 'sometimes|exists:students,id',
             'thecase_id' => 'required|exists:thecases,id',
+            'schedule_id' => 'required|exists:schedules,id',
             'status'     => 'sometimes|in:بانتظار التأكيد,مؤكد,مكتمل,ملغي',
         ]);
 
@@ -150,6 +159,7 @@ class AppointmentController extends Controller
             'patient_id' => $request->patient_id ?? $appointment->patient_id,
             'student_id' => $request->student_id ?? $appointment->student_id,
             'thecase_id' => $request->thecase_id ?? $appointment->thecase_id,
+            'schedule_id' => $request->schedule_id ?? $appointment->schedule_id,
             'status'     => $request->status ?? $appointment->status,
         ]);
 
@@ -198,6 +208,10 @@ class AppointmentController extends Controller
 
         if ($request->has('student_id')) {
             $query->where('student_id', $request->input('student_id'));
+        }
+
+        if ($request->has('schedule_id')) {
+            $query->where('schedule_id', $request->input('schedule_id'));
         }
 
         if ($request->has('status')) {
