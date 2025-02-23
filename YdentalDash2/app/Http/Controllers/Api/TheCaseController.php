@@ -103,7 +103,7 @@ class TheCaseController extends Controller
         $validator = Validator::make($request->all(), [
             'service_id' => 'required|exists:services,id',
             'procedure' => 'required|string|max:255',
-            'gender' => 'required|string|in:Male,Female,Other',
+            'gender' => 'required|string',
             'description' => 'required|string',
             'cost' => 'required|numeric',
             'min_age' => 'required|integer',
@@ -165,7 +165,7 @@ class TheCaseController extends Controller
         $validator = Validator::make($request->all(), [
             'service_id' => 'sometimes|exists:services,id',
             'procedure' => 'sometimes|string|max:255',
-            'gender' => 'sometimes|string|in:Male,Female,Other',
+            'gender' => 'sometimes|string',
             'description' => 'sometimes|string',
             'cost' => 'sometimes|numeric',
             'min_age' => 'sometimes|integer',
@@ -222,7 +222,7 @@ class TheCaseController extends Controller
         $validator = Validator::make($request->all(), [
             'service_id' => 'required|exists:services,id',
             'procedure' => 'required|string|max:255',
-            'gender' => 'required|string|in:Male,Female,Other',
+            'gender' => 'required|string',
             'description' => 'required|string',
             'cost' => 'required|numeric',
             'min_age' => 'required|integer',
@@ -293,7 +293,7 @@ class TheCaseController extends Controller
         $validator = Validator::make($request->all(), [
             'service_id' => 'sometimes|required|exists:services,id',
             'procedure' => 'sometimes|required|string|max:255',
-            'gender' => 'sometimes|required|string|in:Male,Female,Other',
+            'gender' => 'sometimes|required|string',
             'description' => 'sometimes|required|string',
             'cost' => 'sometimes|required|numeric',
             'min_age' => 'sometimes|required|integer',

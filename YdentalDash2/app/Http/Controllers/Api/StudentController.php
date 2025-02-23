@@ -87,7 +87,7 @@ class StudentController extends Controller
                 'email' => 'required|email|unique:students,email',
                 'password' => 'required|string|min:6',
                 'confirmPassword' => 'required|string|same:password',
-                'gender' => 'required|string|in:ذكر,انثى',
+                'gender' => 'required|string',
                 'level' => 'required|string',
                 'phone_number' => 'required|string|unique:students,phone_number',
                 'university_card_number' => 'required|string',
@@ -196,7 +196,7 @@ class StudentController extends Controller
                 'email' => 'sometimes|nullable|email|unique:students,email,' . $student->id,
                 'password' => 'sometimes|nullable|string|min:6',
                 'confirmPassword' => 'sometimes|nullable|string|same:password',
-                'gender' => 'sometimes|nullable|string|in:ذكر,انثى',
+                'gender' => 'sometimes|nullable|string',
                 'level' => 'sometimes|nullable|string',
                 'phone_number' => 'sometimes|nullable|string|unique:students,phone_number,' . $student->id,
                 'university_card_number' => 'sometimes|nullable|string',
@@ -386,8 +386,17 @@ class StudentController extends Controller
                 ]);
             }
 
-            // Get the authenticated student
-            $student = Auth::guard('students')->user()->load('city', 'university');;
+            // Get the authenticated student with relationships
+            $student = Auth::guard('students')->user()->load('city', 'university');
+
+            // Check if the student is blocked
+            if ($student->isBlocked == 'محظور') {
+                Auth::guard('students')->logout(); // Log out the student
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your account has been blocked. Please contact support.',
+                ], 403);
+            }
 
             // Create a new API token for the student
             $token = $student->createToken('student-token')->plainTextToken;
@@ -415,6 +424,7 @@ class StudentController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+
     }
 
     public function profile(Request $request)

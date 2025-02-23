@@ -22,7 +22,7 @@ return new class extends Migration
             $table->String('level');
             $table->String('phone_number')->unique();
             $table->String('university_card_number');
-            $table->String('university_card_image');
+            $table->String('university_card_image')->nullable();
             $table->string('userType');
 
             $table->string('isBlocked');

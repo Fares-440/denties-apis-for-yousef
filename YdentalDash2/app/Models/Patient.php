@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
+
 class Patient extends Authenticatable
 {
     use HasFactory, HasApiTokens;
@@ -37,6 +39,12 @@ class Patient extends Authenticatable
     public function review(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        // Only hash if the value is not already hashed
+        $this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
     }
 
 }

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 
 class Student extends Authenticatable
 {
@@ -56,5 +57,11 @@ class Student extends Authenticatable
     public function cases(): HasMany
     {
         return $this->hasMany(TheCase::class, 'student_id');
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        // Only hash if the value is not already hashed
+        $this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
     }
 }

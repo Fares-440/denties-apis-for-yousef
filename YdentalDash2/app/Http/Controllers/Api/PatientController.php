@@ -202,6 +202,15 @@ class PatientController extends Controller
             // Get the authenticated patient
             $patient = Auth::guard('patients')->user();
 
+            // Check if the patient is blocked
+            if ($patient->isBlocked == 'محظور') {
+                Auth::guard('patients')->logout(); // Log out the patient
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your account has been blocked. Please contact support.',
+                ], 403);
+            }
+
             // Create a new API token for the patient
             $token = $patient->createToken('patient-token')->plainTextToken;
 
