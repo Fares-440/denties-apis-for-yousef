@@ -87,23 +87,35 @@ class AppointmentController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
-                'errors'  => $validator->errors(),
+                'errors' => $validator->errors(),
             ], 422);
         }
+        // Check for existing appointment with the same details and status not cancelled or completed
+        $existingAppointment = Appointment::where('patient_id', $request->patient_id)
+            ->where('student_id', $request->student_id)
+            ->where('thecase_id', $request->thecase_id)
+            ->where('schedule_id', $request->schedule_id)
+            ->whereNotIn('status', [Appointment::STATUS_CANCELLED, Appointment::STATUS_COMPLETED])
+            ->exists();
 
+        if ($existingAppointment) {
+            return response()->json([
+                'message' => 'يوجد لديك حجز بالفعل لهذه البيانات',
+            ], 409);
+        }
         // Create a new appointment record.
         $appointment = Appointment::create([
             'patient_id' => $request->patient_id,
             'student_id' => $request->student_id,
             'thecase_id' => $request->thecase_id,
             'schedule_id' => $request->schedule_id,
-            'status'     => "بانتظار التأكيد",
+            'status' => "بانتظار التأكيد",
             // 'status' => $request->status,
         ]);
 
         // Return the created appointment as a JSON response.
         // Optionally, you may want to load the related thecase info.
-        $appointment->load(['student:id,name', 'patient:id,name', 'thecase','schedule']);
+        $appointment->load(['student:id,name', 'patient:id,name', 'thecase', 'schedule']);
         return response()->json($appointment, 201);
     }
 
@@ -113,7 +125,7 @@ class AppointmentController extends Controller
     public function show(string $id)
     {
         // Find the appointment by ID with the related thecase, student, and patient data.
-        $appointment = Appointment::with(['student:id,name', 'patient:id,name', 'thecase','schedule'])->find($id);
+        $appointment = Appointment::with(['student:id,name', 'patient:id,name', 'thecase', 'schedule'])->find($id);
 
         if (!$appointment) {
             return response()->json([
@@ -144,13 +156,13 @@ class AppointmentController extends Controller
             'student_id' => 'sometimes|exists:students,id',
             'thecase_id' => 'required|exists:thecases,id',
             'schedule_id' => 'required|exists:schedules,id',
-            'status'     => 'sometimes|in:بانتظار التأكيد,مؤكد,مكتمل,ملغي',
+            'status' => 'sometimes|in:بانتظار التأكيد,مؤكد,مكتمل,ملغي',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
-                'errors'  => $validator->errors(),
+                'errors' => $validator->errors(),
             ], 422);
         }
 
@@ -160,7 +172,7 @@ class AppointmentController extends Controller
             'student_id' => $request->student_id ?? $appointment->student_id,
             'thecase_id' => $request->thecase_id ?? $appointment->thecase_id,
             'schedule_id' => $request->schedule_id ?? $appointment->schedule_id,
-            'status'     => $request->status ?? $appointment->status,
+            'status' => $request->status ?? $appointment->status,
         ]);
 
         // Return the updated appointment as a JSON response.
@@ -233,7 +245,7 @@ class AppointmentController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Appointments retrieved successfully',
-            'data'    => $appointments,
+            'data' => $appointments,
         ]);
     }
 }
