@@ -67,6 +67,20 @@ class AppointmentController extends Controller
         $perPage = $request->input('per_page', 10);
         $appointments = $query->paginate($perPage);
 
+        // Transform each appointment in the collection
+        $appointments->getCollection()->transform(function ($appointment) {
+            // Ensure that thecase and its schedules exist before mapping
+            if (isset($appointment->thecase->schedules)) {
+                $appointment->thecase->schedules = collect($appointment->thecase->schedules)->map(function ($schedule) use ($appointment) {
+                    // Set is_booking to true if the schedule id matches the appointment schedule_id, false otherwise.
+                    $schedule->is_booking = ($appointment->schedule_id == $schedule->id);
+                    return $schedule;
+                });
+            }
+            return $appointment;
+        });
+
+
         return response()->json($appointments);
     }
 
