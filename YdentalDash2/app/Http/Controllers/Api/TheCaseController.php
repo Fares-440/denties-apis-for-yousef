@@ -20,7 +20,8 @@ class TheCaseController extends Controller
         $query = Thecase::with([
             'service',
             'schedules',
-            'student:id,name,student_image,city_id,university_id'
+            'student:id,name,student_image,city_id,university_id',
+            'appointments'
         ]);
 
         if ($request->has('search')) {
@@ -47,6 +48,8 @@ class TheCaseController extends Controller
                 $q->where('id', $request->input('schedules_id'));
             });
         }
+
+
 
         if ($request->has('gender')) {
             $query->where('gender', $request->input('gender'));
@@ -90,7 +93,19 @@ class TheCaseController extends Controller
 
         $perPage = $request->input('per_page', 10); // Default 10 per page
         $cases = $query->paginate($perPage);
-
+        // تحويل كل قضية لإضافة خاصية is_booking لكل schedule بناءً على المواعيد المرتبطة
+        $cases->getCollection()->transform(function ($thecase) {
+            if (isset($thecase->schedules)) {
+                // نحصل على قائمة بأرقام الـ schedule في المواعيد المرتبطة بالقضية
+                $bookedScheduleIds = $thecase->appointments->pluck('schedule_id')->toArray();
+                $thecase->schedules = $thecase->schedules->map(function ($schedule) use ($bookedScheduleIds) {
+                    // إذا كان الـ schedule موجودًا في المواعيد، يكون is_booking true وإلا false
+                    $schedule->is_booking = in_array($schedule->id, $bookedScheduleIds);
+                    return $schedule;
+                });
+            }
+            return $thecase;
+        });
         return response()->json($cases);
     }
 

@@ -129,7 +129,7 @@ class StudentController extends Controller
                 'userType' => $request->userType,
                 'isBlocked' => $request->isBlocked,
             ]);
-
+            $student->load('city', 'university');
             // Return the created student as a JSON response
             return response()->json([
                 'student' => $student,

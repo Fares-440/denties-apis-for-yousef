@@ -35,4 +35,10 @@ class Thecase extends Model
         return $this->belongsTo(Student::class, 'student_id');
     }
 
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'thecase_id');
+    }
+
+
 }
