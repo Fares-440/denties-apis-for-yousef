@@ -38,6 +38,9 @@ class Student extends Authenticatable
         'confirmPassword',
     ];
 
+    protected $appends = ['student_image_url', 'university_card_image_url'];
+
+
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
@@ -63,5 +66,14 @@ class Student extends Authenticatable
     {
         // Only hash if the value is not already hashed
         $this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
+    }
+    public function getStudentImageUrlAttribute()
+    {
+        return $this->student_image ? asset('storage/' . $this->student_image) : null;
+    }
+
+    public function getUniversityCardImageUrlAttribute()
+    {
+        return $this->university_card_image ? asset('storage/' . $this->university_card_image) : null;
     }
 }
