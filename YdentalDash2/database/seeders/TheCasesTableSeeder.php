@@ -8,6 +8,6 @@ class TheCasesTableSeeder extends Seeder
 {
     public function run()
     {
-        TheCase::factory()->times(50)->create();
+        TheCase::factory()->times(5)->create();
     }
 }

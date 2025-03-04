@@ -9,6 +9,6 @@ class SchedulesTableSeeder extends Seeder
 {
     public function run()
     {
-        Schedule::factory()->times(100)->create();
+        Schedule::factory()->times(6)->create();
     }
 }

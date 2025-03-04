@@ -8,6 +8,6 @@ class AppointmentsTableSeeder extends Seeder
 {
     public function run()
     {
-        Appointment::factory()->times(50)->create();
+        Appointment::factory()->times(5)->create();
     }
 }

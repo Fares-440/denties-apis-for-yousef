@@ -8,6 +8,6 @@ class StudentsTableSeeder extends Seeder
 {
     public function run()
     {
-        Student::factory()->times(15)->create();
+        Student::factory()->times(5)->create();
     }
 }

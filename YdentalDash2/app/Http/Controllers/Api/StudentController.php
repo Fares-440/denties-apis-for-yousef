@@ -98,19 +98,17 @@ class StudentController extends Controller
                 'isBlocked' => 'required|string',
             ]);
 
-            // Handle student image upload
+            // Handle student image upload using default storage (public disk) into the "images" folder
             if ($request->hasFile('student_image')) {
                 $studentImage = $request->file('student_image');
-                $studentImagePath = 'student_images/' . uniqid() . '.' . $studentImage->getClientOriginalExtension();
-                $studentImage->move(public_path('student_images'), basename($studentImagePath));
+                $studentImagePath = $studentImage->store('images', 'public');
             } else {
                 $studentImagePath = null;
             }
 
-            // Handle university card image upload
+            // Handle university card image upload using default storage (public disk) into the "images" folder
             $universityCardImage = $request->file('university_card_image');
-            $universityCardImagePath = 'university_card_images/' . uniqid() . '.' . $universityCardImage->getClientOriginalExtension();
-            $universityCardImage->move(public_path('university_card_images'), basename($universityCardImagePath));
+            $universityCardImagePath = $universityCardImage->store('images', 'public');
 
             // Create a new student record
             $student = Student::create([
@@ -129,12 +127,14 @@ class StudentController extends Controller
                 'userType' => $request->userType,
                 'isBlocked' => $request->isBlocked,
             ]);
+
             $student->load('city', 'university');
-            // Return the created student as a JSON response
+
+            // Return the created student as a JSON response with public URLs for the images
             return response()->json([
                 'student' => $student,
-                'student_image_url' => $studentImagePath ? url($studentImagePath) : null,
-                'university_card_image_url' => url($universityCardImagePath),
+                'student_image_url' => $studentImagePath ? Storage::url($studentImagePath) : null,
+                'university_card_image_url' => Storage::url($universityCardImagePath),
             ], 201);
 
         } catch (ValidationException $e) {
@@ -153,6 +153,8 @@ class StudentController extends Controller
             ], 500);
         }
     }
+
+
 
     /**
      * Display the specified resource.
@@ -207,32 +209,28 @@ class StudentController extends Controller
                 'isBlocked' => 'sometimes|nullable|string',
             ]);
 
-            // Handle student image upload
+            // Handle student image upload using default storage (public disk)
             if ($request->hasFile('student_image')) {
-                // Delete the old student image if it exists
-                if ($student->student_image && file_exists(public_path($student->student_image))) {
-                    unlink(public_path($student->student_image));
+                // Delete the old student image if it exists in the public disk
+                if ($student->student_image && Storage::disk('public')->exists($student->student_image)) {
+                    Storage::disk('public')->delete($student->student_image);
                 }
-
-                // Upload the new student image
+                // Upload the new student image to the "student_images" directory on the public disk
                 $studentImage = $request->file('student_image');
-                $studentImagePath = 'student_images/' . uniqid() . '.' . $studentImage->getClientOriginalExtension();
-                $studentImage->move(public_path('student_images'), basename($studentImagePath));
+                $studentImagePath = $studentImage->store('images', 'public');
             } else {
                 $studentImagePath = $student->student_image;
             }
 
-            // Handle university card image upload
+            // Handle university card image upload using default storage (public disk)
             if ($request->hasFile('university_card_image')) {
-                // Delete the old university card image if it exists
-                if ($student->university_card_image && file_exists(public_path($student->university_card_image))) {
-                    unlink(public_path($student->university_card_image));
+                // Delete the old university card image if it exists in the public disk
+                if ($student->university_card_image && Storage::disk('public')->exists($student->university_card_image)) {
+                    Storage::disk('public')->delete($student->university_card_image);
                 }
-
-                // Upload the new university card image
+                // Upload the new university card image to the "university_card_images" directory on the public disk
                 $universityCardImage = $request->file('university_card_image');
-                $universityCardImagePath = 'university_card_images/' . uniqid() . '.' . $universityCardImage->getClientOriginalExtension();
-                $universityCardImage->move(public_path('university_card_images'), basename($universityCardImagePath));
+                $universityCardImagePath = $universityCardImage->store('images', 'public');
             } else {
                 $universityCardImagePath = $student->university_card_image;
             }
@@ -255,11 +253,11 @@ class StudentController extends Controller
                 'isBlocked' => $request->isBlocked ?? $student->isBlocked,
             ]);
 
-            // Return the updated student as a JSON response
+            // Return the updated student as a JSON response with image URLs from storage
             return response()->json([
                 'student' => $student,
-                'student_image_url' => $studentImagePath ? url($studentImagePath) : null,
-                'university_card_image_url' => $universityCardImagePath ? url($universityCardImagePath) : null,
+                'student_image_url' => $studentImagePath ? Storage::url($studentImagePath) : null,
+                'university_card_image_url' => $universityCardImagePath ? Storage::url($universityCardImagePath) : null,
             ]);
 
         } catch (ValidationException $e) {
@@ -278,6 +276,7 @@ class StudentController extends Controller
             ], 500);
         }
     }
+
 
 
     /**

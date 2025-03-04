@@ -8,6 +8,6 @@ class ReviewsTableSeeder extends Seeder
 {
     public function run()
     {
-        Review::factory()->times(50)->create();
+        Review::factory()->times(5)->create();
     }
 }

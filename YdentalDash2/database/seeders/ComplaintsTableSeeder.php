@@ -9,6 +9,6 @@ class ComplaintsTableSeeder extends Seeder
 {
     public function run()
     {
-        Complaint::factory()->times(50)->create();
+        Complaint::factory()->times(5)->create();
     }
 }

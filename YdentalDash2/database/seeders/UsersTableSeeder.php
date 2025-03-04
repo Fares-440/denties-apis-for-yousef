@@ -8,6 +8,6 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        User::factory()->times(50)->create();
+        User::factory()->times(count: 15)->create();
     }
 }

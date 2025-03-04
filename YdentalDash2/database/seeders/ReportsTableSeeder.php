@@ -8,6 +8,6 @@ class ReportsTableSeeder extends Seeder
 {
     public function run()
     {
-        Report::factory()->times(100)->create();
+        Report::factory()->times(10)->create();
     }
 }
