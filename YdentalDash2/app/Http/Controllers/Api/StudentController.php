@@ -159,19 +159,19 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+   public function show(string $id)
     {
-        // Find the student by ID
-        $student = Student::find($id);
-
+        // Find the student by ID with university and city
+        $student = Student::with(['university', 'city'])->find($id);
+    
         // If the student doesn't exist, return a 404 error
         if (!$student) {
             return response()->json([
                 'message' => 'Student not found',
             ], 404);
         }
-
-        // Return the student as a JSON response
+    
+        // Return the student with related data
         return response()->json($student);
     }
 
